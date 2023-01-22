@@ -3,6 +3,9 @@ package com.pratyushapps.productdata;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,6 +51,57 @@ class ProductdataApplicationTests {
 			System.out.println("Deleting a product");
 			productRepository.deleteById(1);
 		}
+	}
+	
+	@Test
+	public void testCount() {
+		System.out.println("Total Records===============>>>>>>>>>>>>>>>" + productRepository.count());
+
+	}
+	
+	@Test
+	public void testFindByName() {
+		List<Product> products = productRepository.findByName("I Watch");
+		products.forEach(p -> System.out.println(p.getPrice()));
+
+		List<Product> products1 = productRepository.findByName("I Watch");
+		products1.forEach(p -> System.out.println(p.getPrice()));
+	}
+	
+	@Test
+	public void testFindByNameAndDesc() {
+		List<Product> products = productRepository.findByNameAndDesc("TV", "From Samsung Inc");
+		products.forEach(p -> System.out.println(p.getPrice()));
+	}
+	
+	@Test
+	public void testFindByPriceGreaterThan() {
+		List<Product> products = productRepository.findByPriceGreaterThan(1000d);
+		products.forEach(p -> System.out.println(p.getName()));
+	}
+	
+	@Test
+	public void testFindByDescContains() {
+		List<Product> products = productRepository.findByDescContains("Apple");
+		products.forEach(p -> System.out.println(p.getName()));
+	}
+	
+	@Test
+	public void testFindByPriceBetween() {
+		List<Product> products = productRepository.findByPriceBetween(500d, 2500d);
+		products.forEach(p -> System.out.println(p.getName()));
+	}
+
+	@Test
+	public void testFindByDescLike() {
+		List<Product> products = productRepository.findByDescLike("%LG%");
+		products.forEach(p -> System.out.println(p.getName()));
+	}
+	
+	@Test
+	public void testFindByIdsIn() {
+		List<Product> products = productRepository.findByIdIn(Arrays.asList(1, 2, 3));
+		products.forEach(p -> System.out.println(p.getName()));
 	}
 
 }
