@@ -10,6 +10,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.pratyushapps.productdata.entity.Product;
@@ -52,13 +56,13 @@ class ProductdataApplicationTests {
 			productRepository.deleteById(1);
 		}
 	}
-	
+
 	@Test
 	public void testCount() {
 		System.out.println("Total Records===============>>>>>>>>>>>>>>>" + productRepository.count());
 
 	}
-	
+
 	@Test
 	public void testFindByName() {
 		List<Product> products = productRepository.findByName("I Watch");
@@ -67,25 +71,25 @@ class ProductdataApplicationTests {
 		List<Product> products1 = productRepository.findByName("I Watch");
 		products1.forEach(p -> System.out.println(p.getPrice()));
 	}
-	
+
 	@Test
 	public void testFindByNameAndDesc() {
 		List<Product> products = productRepository.findByNameAndDesc("TV", "From Samsung Inc");
 		products.forEach(p -> System.out.println(p.getPrice()));
 	}
-	
+
 	@Test
 	public void testFindByPriceGreaterThan() {
 		List<Product> products = productRepository.findByPriceGreaterThan(1000d);
 		products.forEach(p -> System.out.println(p.getName()));
 	}
-	
+
 	@Test
 	public void testFindByDescContains() {
 		List<Product> products = productRepository.findByDescContains("Apple");
 		products.forEach(p -> System.out.println(p.getName()));
 	}
-	
+
 	@Test
 	public void testFindByPriceBetween() {
 		List<Product> products = productRepository.findByPriceBetween(500d, 2500d);
@@ -97,11 +101,40 @@ class ProductdataApplicationTests {
 		List<Product> products = productRepository.findByDescLike("%LG%");
 		products.forEach(p -> System.out.println(p.getName()));
 	}
-	
+
 	@Test
 	public void testFindByIdsIn() {
-		List<Product> products = productRepository.findByIdIn(Arrays.asList(1, 2, 3));
+		Pageable pageable = PageRequest.of(1, 2);
+		List<Product> products = productRepository.findByIdIn(Arrays.asList(1, 2, 3,4),pageable);
 		products.forEach(p -> System.out.println(p.getName()));
 	}
+
+	@Test
+	public void testFindAllPaging() {
+		Pageable pageable = PageRequest.of(0, 2);
+		Iterable<Product> results = productRepository.findAll(pageable);
+		results.forEach(p -> System.out.println(p.getName()));
+
+	}
+
+	@Test
+	public void testFindAllSorting() {		
+
+		productRepository.findAll(Sort.by(new Sort.Order(Direction.DESC, "name"), new Sort.Order(null, "price")))
+				.forEach(p -> System.out.println(p.getName()));
+		
+
+		//productRepository.findAll(Sort.by("name", "price")).forEach(p ->
+		// System.out.println(p.getName()));
+
+	}
+	
+	@Test
+	public void testFindAllPagingAndSorting() {
+		Pageable pageable = PageRequest.of(0, 2, Direction.DESC, "name");
+		productRepository.findAll(pageable).forEach(p -> System.out.println(p.getName()));
+
+	}
+
 
 }
