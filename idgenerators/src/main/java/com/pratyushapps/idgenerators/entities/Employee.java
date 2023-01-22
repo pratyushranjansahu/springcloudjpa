@@ -4,11 +4,14 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.TableGenerator;
 
 @Entity
 public class Employee {
+	
+	@TableGenerator(name = "employee_gen", table = "id_gen", pkColumnName = "gen_name", valueColumnName = "gen_val",allocationSize=100)
 	@Id
-	@GeneratedValue(strategy  = GenerationType.IDENTITY)
+	@GeneratedValue(strategy  = GenerationType.TABLE,generator = "employee_gen")
 	// @GeneratedValue(strategy = GenerationType.TABLE,generator="employee_gen")
 	private Long id;
 	private String name;
