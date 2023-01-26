@@ -8,6 +8,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -43,7 +45,7 @@ class JpqlandnativesqlApplicationTests {
 
 	@Test
 	public void testFindAllStudents() {
-		System.out.println(repository.findAllStudents());
+		System.out.println(repository.findAllStudents(PageRequest.of(0, 5, Direction.DESC, "id")));
 	}
 
 	@Test
